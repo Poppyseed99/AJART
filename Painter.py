@@ -7,6 +7,9 @@ from math import floor
 # Assuming the top-left corner of the canvas is (x_start, y_start)
 # We need to anchor the canvas location relative to the display resolution
 x_start, y_start = 240, 129  # Adjust these to match where your canvas starts on the screen
+while True:
+    x, y = pyautogui.position()
+    print(f"Mouse position: ({x}, {y})")
 
 def select_color(color):
     time.sleep(1)
