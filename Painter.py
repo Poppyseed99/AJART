@@ -4,21 +4,24 @@ import keyboard
 from PIL import Image
 from math import floor
 
+# Assuming the top-left corner of the canvas is (x_start, y_start)
+# We need to anchor the canvas location relative to the display resolution
+x_start, y_start = 416, 297  # Adjust these to match where your canvas starts on the screen
 
 def select_color(color):
     time.sleep(1)
     if color == "cyan":
-        pyautogui.click(121, 202)
+        pyautogui.click(x_start + 121, y_start + 202)
     elif color == "magenta":
-        pyautogui.click(81, 299)
+        pyautogui.click(x_start + 81, y_start + 299)
     elif color == "yellow":
-        pyautogui.click(123, 121)
+        pyautogui.click(x_start + 123, y_start + 121)
     elif color == "red":
-        pyautogui.click(103, 82)
+        pyautogui.click(x_start + 103, y_start + 82)
     elif color == "blue":
-        pyautogui.click(95, 230)
+        pyautogui.click(x_start + 95, y_start + 230)
     elif color == "green":
-        pyautogui.click(102, 150)
+        pyautogui.click(x_start + 102, y_start + 150)
     else:
         raise ValueError(f"Value {color} not in colors")
     time.sleep(1)
@@ -27,15 +30,15 @@ def select_color(color):
 def select_size(size):
     time.sleep(1)
     if size <= 3:
-        pyautogui.click(78, 786)
+        pyautogui.click(x_start + 78, y_start + 786)
     elif size <= 7:
-        pyautogui.click(156, 784)
+        pyautogui.click(x_start + 156, y_start + 784)
     elif size <= 13:
-        pyautogui.click(83, 834)
+        pyautogui.click(x_start + 83, y_start + 834)
     elif size <= 20:
-        pyautogui.click(158, 828)
+        pyautogui.click(x_start + 158, y_start + 828)
     elif size <= 40:
-        pyautogui.click(76, 885)
+        pyautogui.click(x_start + 76, y_start + 885)
     time.sleep(1)
 
 
@@ -98,11 +101,11 @@ class Painter:
                             pass
                         stop = False
                         print("unstopped")
-                    xloc = 350 + xval * self.width / self.x
-                    yloc = 110 + yval * self.height / self.y
+                    xloc = x_start + 350 + xval * self.width / self.x
+                    yloc = y_start + 110 + yval * self.height / self.y
 
                     # Make sure the cursor stays within the canvas
-                    if xloc < 0 or xloc > self.width or yloc < 0 or yloc > self.height:
+                    if xloc < x_start or xloc > x_start + self.width or yloc < y_start or yloc > y_start + self.height:
                         continue
 
                     px = self.pix[xval, yval]
@@ -119,5 +122,6 @@ class Painter:
                         stop = True
             counter += 1
         self.done = True
+
 
 
