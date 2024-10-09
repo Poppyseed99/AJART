@@ -1,52 +1,80 @@
 import time
+
 import pyautogui
 import keyboard
 from PIL import Image
 from math import floor
 
-# Assuming the top-left corner of the canvas is (x_start, y_start)
-# We need to anchor the canvas location relative to the display resolution
-x_start, y_start = 240, 129  # Adjust these to match where your canvas starts on the screen
-while True:
-    x, y = pyautogui.position()
-    print(f"Mouse position: ({x}, {y})")
 
 def select_color(color):
+    pyautogui.click(53, 31)
     time.sleep(1)
     if color == "cyan":
-        pyautogui.click(x_start + 121, y_start + 202)
+        pyautogui.click(198, 193)
     elif color == "magenta":
-        pyautogui.click(x_start + 81, y_start + 299)
+        pyautogui.click(198, 286)
     elif color == "yellow":
-        pyautogui.click(x_start + 123, y_start + 121)
+        pyautogui.click(198, 101)
+    elif color == "key" or color == "black":
+        pyautogui.click(131, 354)
     elif color == "red":
-        pyautogui.click(x_start + 103, y_start + 82)
+        pyautogui.click(457, 165)
     elif color == "blue":
-        pyautogui.click(x_start + 95, y_start + 230)
+        pyautogui.click(457, 409)
     elif color == "green":
-        pyautogui.click(x_start + 102, y_start + 150)
+        pyautogui.click(457, 695)
     else:
         raise ValueError(f"Value {color} not in colors")
+    time.sleep(1)
+    pyautogui.click(1108, 60)
     time.sleep(1)
 
 
 def select_size(size):
+    pyautogui.click(53, 516)
     time.sleep(1)
     if size <= 3:
-        pyautogui.click(x_start + 78, y_start + 786)
+        pyautogui.click(172, 866)
     elif size <= 7:
-        pyautogui.click(x_start + 156, y_start + 784)
+        pyautogui.click(265, 866)
     elif size <= 13:
-        pyautogui.click(x_start + 83, y_start + 834)
+        pyautogui.click(172, 917)
     elif size <= 20:
-        pyautogui.click(x_start + 158, y_start + 828)
+        pyautogui.click(265, 917)
     elif size <= 40:
-        pyautogui.click(x_start + 76, y_start + 885)
+        pyautogui.click(172, 980)
+    else:
+        pyautogui.click(265, 980)
     time.sleep(1)
+
+
+def gcr(im):
+    """
+    Basic "Gray Component Replacement" function. Returns a CMYK image with
+    percentage gray component removed from the CMY channels and put in the
+    K channel, ie. for percentage=100, (41, 100, 255, 0) >> (0, 59, 214, 41)
+    """
+    cmyk_im = im.split()
+    cmyk = []
+    for i in range(4):
+        cmyk.append(cmyk_im[i].load())
+    for x in range(im.size[0]):
+        for y in range(im.size[1]):
+            gray = int(
+                min(cmyk[0][x, y], cmyk[1][x, y], cmyk[2][x, y])
+            )
+            for i in range(3):
+                cmyk[i][x, y] = cmyk[i][x, y] - gray
+            cmyk[3][x, y] = gray
+    return Image.merge("CMYK", cmyk_im)
 
 
 def getcolors(mode):
-    if mode == "RGB":
+    if mode == "CMYK":
+        return ["cyan", "magenta", "yellow", "key"]
+    elif mode == "L":
+        return ["black"]
+    elif mode == "RGB":
         return ["red", "green", "blue"]
 
 
@@ -69,8 +97,10 @@ class Painter:
         self.scaledivisor = scaledivisor
         self.img = Image.open(filename)
         self.img = self.img.convert(self.mode)
-        self.width = 703  # Canvas width for Animal Jam Classic
-        self.height = 430  # Canvas height for Animal Jam Classic
+        if self.mode == "CMYK":
+            self.img = gcr(self.img)
+        self.width = 1380
+        self.height = 850
         self.img = self.img.resize((self.width // self.scaledivisor, self.height // self.scaledivisor))
         self.pix = self.img.load()
         self.x, self.y = self.img.size
@@ -79,6 +109,7 @@ class Painter:
         keyboard.add_hotkey("[", self.drawpic)
 
     def drawpic(self):
+        pyautogui.click(176, 699)
         time.sleep(1)
         select_size(self.scaledivisor)
 
@@ -104,13 +135,8 @@ class Painter:
                             pass
                         stop = False
                         print("unstopped")
-                    xloc = x_start + 350 + xval * self.width / self.x
-                    yloc = y_start + 110 + yval * self.height / self.y
-
-                    # Make sure the cursor stays within the canvas
-                    if xloc < x_start or xloc > x_start + self.width or yloc < y_start or yloc > y_start + self.height:
-                        continue
-
+                    xloc = 350 + xval * self.width / self.x
+                    yloc = 110 + yval * self.height / self.y
                     px = self.pix[xval, yval]
                     print(px)
                     if type(px) != int:
