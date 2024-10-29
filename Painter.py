@@ -1,50 +1,59 @@
 import time
+
 import pyautogui
 import keyboard
 from PIL import Image
 from math import floor
 
+
 def select_color(color):
-    pyautogui.click(37, 132)  # Click on the paintbrush
+    pyautogui.click(53, 31)
     time.sleep(1)
     if color == "cyan":
-        pyautogui.click(814, 470)
+        pyautogui.click(198, 193)
     elif color == "magenta":
-        pyautogui.click(814, 282)
+        pyautogui.click(198, 286)
     elif color == "yellow":
-        pyautogui.click(820, 618)
+        pyautogui.click(198, 101)
     elif color == "key" or color == "black":
-        pyautogui.click(1028, 824)
+        pyautogui.click(131, 354)
     elif color == "red":
-        pyautogui.click(818, 685)
+        pyautogui.click(457, 165)
     elif color == "blue":
-        pyautogui.click(823, 399)
+        pyautogui.click(457, 409)
     elif color == "green":
-        pyautogui.click(824, 541)
+        pyautogui.click(457, 695)
     else:
         raise ValueError(f"Value {color} not in colors")
     time.sleep(1)
-    pyautogui.click(1135, 157)  # Click the X button to close the palette
+    pyautogui.click(1108, 60)
     time.sleep(1)
+
 
 def select_size(size):
     pyautogui.click(53, 516)
     time.sleep(1)
-    if size <= 5:
-        pyautogui.click(247, 660)
-    elif size <= 10:
-        pyautogui.click(420, 660)
+    if size <= 3:
+        pyautogui.click(172, 866)
+    elif size <= 7:
+        pyautogui.click(265, 866)
+    elif size <= 13:
+        pyautogui.click(172, 917)
     elif size <= 20:
-        pyautogui.click(576, 660)
-    elif size <= 30:
-        pyautogui.click(751, 660)
+        pyautogui.click(265, 917)
     elif size <= 40:
-        pyautogui.click(929, 660)
+        pyautogui.click(172, 980)
     else:
-        pyautogui.click(1087, 660)
+        pyautogui.click(265, 980)
     time.sleep(1)
 
+
 def gcr(im):
+    """
+    Basic "Gray Component Replacement" function. Returns a CMYK image with
+    percentage gray component removed from the CMY channels and put in the
+    K channel, ie. for percentage=100, (41, 100, 255, 0) >> (0, 59, 214, 41)
+    """
     cmyk_im = im.split()
     cmyk = []
     for i in range(4):
@@ -59,6 +68,7 @@ def gcr(im):
             cmyk[3][x, y] = gray
     return Image.merge("CMYK", cmyk_im)
 
+
 def getcolors(mode):
     if mode == "CMYK":
         return ["cyan", "magenta", "yellow", "key"]
@@ -67,6 +77,7 @@ def getcolors(mode):
     elif mode == "RGB":
         return ["red", "green", "blue"]
 
+
 def click(xloc, yloc, speed):
     if speed:
         pyautogui.click(xloc, yloc)
@@ -74,6 +85,7 @@ def click(xloc, yloc, speed):
         pyautogui.moveTo(xloc, yloc)
         pyautogui.mouseDown()
         pyautogui.mouseUp()
+
 
 class Painter:
     def __init__(self, filename, mode, scaledivisor, speed, cd):
@@ -87,8 +99,8 @@ class Painter:
         self.img = self.img.convert(self.mode)
         if self.mode == "CMYK":
             self.img = gcr(self.img)
-        self.width = 1320
-        self.height = 1080
+        self.width = 1380
+        self.height = 850
         self.img = self.img.resize((self.width // self.scaledivisor, self.height // self.scaledivisor))
         self.pix = self.img.load()
         self.x, self.y = self.img.size
@@ -97,9 +109,7 @@ class Painter:
         keyboard.add_hotkey("[", self.drawpic)
 
     def drawpic(self):
-        pyautogui.click(38, 381)  # Updated from (71, 414)
-        time.sleep(1)
-        pyautogui.click(681, 154)  # Updated from (412, 216)
+        pyautogui.click(176, 699)
         time.sleep(1)
         select_size(self.scaledivisor)
 
@@ -125,8 +135,8 @@ class Painter:
                             pass
                         stop = False
                         print("unstopped")
-                    xloc = 360 + xval * self.width / self.x
-                    yloc = yval * self.height / self.y
+                    xloc = 350 + xval * self.width / self.x
+                    yloc = 110 + yval * self.height / self.y
                     px = self.pix[xval, yval]
                     print(px)
                     if type(px) != int:
