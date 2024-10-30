@@ -10,19 +10,19 @@ def select_color(color):
     pyautogui.click(53, 31)
     time.sleep(1)
     if color == "cyan":
-        pyautogui.click(198, 193)
+        pyautogui.click(120, 200)
     elif color == "magenta":
-        pyautogui.click(198, 286)
+        pyautogui.click(90, 297)
     elif color == "yellow":
-        pyautogui.click(198, 101)
+        pyautogui.click(116, 121)
     elif color == "key" or color == "black":
-        pyautogui.click(131, 354)
+        pyautogui.click(49, 338)
     elif color == "red":
-        pyautogui.click(457, 165)
+        pyautogui.click(109, 79)
     elif color == "blue":
-        pyautogui.click(457, 409)
+        pyautogui.click(94, 241)
     elif color == "green":
-        pyautogui.click(457, 695)
+        pyautogui.click(106, 168)
     else:
         raise ValueError(f"Value {color} not in colors")
     time.sleep(1)
@@ -31,16 +31,16 @@ def select_color(color):
 
 
 def select_size(size):
-    pyautogui.click(53, 516)
+    pyautogui.click(763, 516)
     time.sleep(1)
     if size <= 3:
-        pyautogui.click(172, 866)
+        pyautogui.click(85, 788)
     elif size <= 7:
-        pyautogui.click(265, 866)
+        pyautogui.click(147, 794)
     elif size <= 13:
-        pyautogui.click(172, 917)
+        pyautogui.click(79, 841)
     elif size <= 20:
-        pyautogui.click(265, 917)
+        pyautogui.click(160, 835)
     elif size <= 40:
         pyautogui.click(172, 980)
     else:
